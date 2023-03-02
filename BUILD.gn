@@ -1,0 +1,23 @@
+import("//build/config/compiler/compiler.gni")
+
+
+config("tracy_config") {
+  include_dirs = ["./public"]
+  defines = ["TRACY_ENABLE", "TRACY_ON_DEMAND", "TRACY_NO_CALLSTACK", "TRACY_MANUAL_LIFETIME", "TRACY_DELAYED_INIT"]
+}
+
+static_library("tracy") {
+  sources = [
+    "public/TracyClient.cpp"
+  ]
+
+  if(is_clang) {
+    cflags = [
+      "-Wno-error=format", 
+      "-Wno-error=extra-semi", 
+      "-Wno-error=shadow"
+      ]
+  }
+
+  public_configs = [":tracy_config"]
+}
